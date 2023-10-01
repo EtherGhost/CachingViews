@@ -1,9 +1,13 @@
 using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Navigation.Event;
+using Avalonia.Navigation.Helper;
 using Avalonia.Navigation.Startup;
 using Avalonia.Navigation.View;
+using Avalonia.Navigation.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
+using Prism.Events;
 
 namespace Avalonia.Navigation
 {
@@ -21,7 +25,7 @@ namespace Avalonia.Navigation
             
             var bootstrapper = new Bootstrapper(serviceCollection);
             Container = bootstrapper.Bootstrap();
-            
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = Container.Resolve<MainWindow>();

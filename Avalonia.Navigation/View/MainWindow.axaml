@@ -4,10 +4,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:Avalonia.Navigation.ViewModel"
         xmlns:view="clr-namespace:Avalonia.Navigation.View"
+        xmlns:helper="clr-namespace:Avalonia.Navigation.Helper"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avalonia.Navigation.View.MainWindow"
         x:DataType="viewmodel:MainViewModel"
         Title="Avalonia.Navigation">
+    
+    <Window.DataTemplates>
+        <helper:ViewLocator />
+    </Window.DataTemplates>
     
     <DockPanel>
         <view:NavigationView DataContext="{CompiledBinding NavigationViewModel}" />

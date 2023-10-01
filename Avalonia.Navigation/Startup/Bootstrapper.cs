@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Avalonia.Navigation.Helper;
 using Avalonia.Navigation.View;
 using Avalonia.Navigation.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +20,9 @@ namespace Avalonia.Navigation.Startup
         public IContainer Bootstrap()
         {
             var builder = new ContainerBuilder();
-
+            
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
+            builder.RegisterType<ViewModelToViewMapper>().As<IViewModelToViewMapper>().SingleInstance();
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();;
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
