@@ -13,20 +13,17 @@ namespace Avalonia.Navigation.Helper;
 
 public sealed class ViewLocator : IDataTemplate
 {
+    private readonly IEventAggregator _eventAggregator;
     private readonly List<ViewCacheEntry> _viewCache = new List<ViewCacheEntry>();
     private readonly IViewModelToViewMapper _viewModelToViewMapper;
 
-    public ViewLocator()
+    public ViewLocator(IEventAggregator eventAggregator, 
+        IViewModelToViewMapper viewModelToViewMapper)
     {
-        var container = ((App) Application.Current).Container;
-        var eventAggregator = container.Resolve<IEventAggregator>();
-        eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
-        
-        var viewModelToViewMapper = container.Resolve<IViewModelToViewMapper>();
-        viewModelToViewMapper.MapViewModelToView(typeof(ProjectDetailViewModel), typeof(ProjectDetailView));
-        viewModelToViewMapper.MapViewModelToView(typeof(SystemDetailViewModel), typeof(SystemDetailView));
-            
+        _eventAggregator = eventAggregator;
         _viewModelToViewMapper = viewModelToViewMapper;
+        
+        _eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
     }
 
     public bool Match(object? data)
@@ -53,6 +50,7 @@ public sealed class ViewLocator : IDataTemplate
             if (viewType != null)
             {
                 var view = (Control)Activator.CreateInstance(viewType);
+
                 var newCacheEntry = new ViewCacheEntry(view, viewModelName, id);
                 _viewCache.Add(newCacheEntry);
                 return view;
@@ -61,18 +59,18 @@ public sealed class ViewLocator : IDataTemplate
 
         return new TextBlock { Text = "Not Found" };
     }
-
-    public void AfterDetailClosed(AfterDetailClosedEventArgs args)
-    {
-        var cacheEntry = _viewCache.FirstOrDefault(entry =>
-            entry.ViewModelName == args.ViewModelName && entry.Id == args.Id);
-        _viewCache.Remove(cacheEntry);
-    }
     
     public bool SupportsRecycling => false;
 
     private Type GetViewType(Type viewModelType)
     {
         return _viewModelToViewMapper.GetViewType(viewModelType);
+    }
+
+    private void AfterDetailClosed(AfterDetailClosedEventArgs args)
+    {
+        var cacheEntry = _viewCache.FirstOrDefault(entry =>
+            entry.ViewModelName == args.ViewModelName && entry.Id == args.Id);
+        _viewCache.Remove(cacheEntry);
     }
 }

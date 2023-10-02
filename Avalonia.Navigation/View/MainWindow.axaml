@@ -11,7 +11,7 @@
         Title="Avalonia.Navigation">
     
     <Window.DataTemplates>
-        <helper:ViewLocator />
+        <!--<helper:ViewLocator />-->
     </Window.DataTemplates>
     
     <DockPanel>

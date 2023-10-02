@@ -25,6 +25,15 @@ namespace Avalonia.Navigation
             
             var bootstrapper = new Bootstrapper(serviceCollection);
             Container = bootstrapper.Bootstrap();
+            
+            var eventAggregator = Container.Resolve<IEventAggregator>();
+            var viewModelToViewMapper = Container.Resolve<IViewModelToViewMapper>();
+            
+            viewModelToViewMapper.MapViewModelToView(typeof(ProjectDetailViewModel), typeof(ProjectDetailView));
+            viewModelToViewMapper.MapViewModelToView(typeof(SystemDetailViewModel), typeof(SystemDetailView));
+            
+            var locator = new ViewLocator(eventAggregator, viewModelToViewMapper);
+            DataTemplates.Add(locator);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
