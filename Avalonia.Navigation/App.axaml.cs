@@ -28,9 +28,8 @@ namespace Avalonia.Navigation
             var eventAggregator = Container.Resolve<IEventAggregator>();
             var viewModelToViewMapper = Container.Resolve<IViewModelToViewMapper>();
             
-            viewModelToViewMapper.MapViewModelToView<ProjectDetailViewModel, ProjectDetailView>(vm => new ProjectDetailView());
-            viewModelToViewMapper.MapViewModelToView<SystemDetailViewModel, SystemDetailView>(vm => new SystemDetailView());
-            
+            MapViewModelsToViews(viewModelToViewMapper);
+
             var locator = new ViewLocator(eventAggregator, viewModelToViewMapper);
             DataTemplates.Add(locator);
 
@@ -41,7 +40,13 @@ namespace Avalonia.Navigation
 
             base.OnFrameworkInitializationCompleted();
         }
-        
+
         public IContainer Container { get; private set; }
+
+        private static void MapViewModelsToViews(IViewModelToViewMapper viewModelToViewMapper)
+        {
+            viewModelToViewMapper.MapViewModelToView<ProjectDetailViewModel, ProjectDetailView>(vm => new ProjectDetailView());
+            viewModelToViewMapper.MapViewModelToView<SystemDetailViewModel, SystemDetailView>(vm => new SystemDetailView());
+        }
     }
 }

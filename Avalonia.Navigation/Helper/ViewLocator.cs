@@ -15,11 +15,11 @@ public sealed class ViewLocator : IDataTemplate
     private readonly List<ViewCacheEntry> _viewCache = new List<ViewCacheEntry>();
     private readonly IViewModelToViewMapper _viewModelToViewMapper;
 
-    public ViewLocator(IEventAggregator eventAggregator, 
+    public ViewLocator(IEventAggregator eventAggregator,
         IViewModelToViewMapper viewModelToViewMapper)
     {
         _viewModelToViewMapper = viewModelToViewMapper;
-        
+
         eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
     }
 
@@ -32,7 +32,10 @@ public sealed class ViewLocator : IDataTemplate
     {
         if (data is DetailViewModelBase viewModel)
         {
-            var view = GetViewType(viewModel);
+            var view = GetView(viewModel);
+            
+            if (view is null) return new TextBlock { Text = "Not Found" };
+
             var viewModelName = viewModel.GetType().Name;
             var id = viewModel.Id;
 
@@ -44,20 +47,17 @@ public sealed class ViewLocator : IDataTemplate
                 return cacheEntry.View;
             }
 
-            if (view is not TextBlock)
-            {
-                var newCacheEntry = new ViewCacheEntry(view, viewModelName, id);
-                _viewCache.Add(newCacheEntry);
-                return view;
-            }
+            var newCacheEntry = new ViewCacheEntry(view, viewModelName, id);
+            _viewCache.Add(newCacheEntry);
+            return view;
         }
 
         return new TextBlock { Text = "Not Found" };
     }
-    
+
     public bool SupportsRecycling => false;
 
-    private Control GetViewType(DetailViewModelBase viewModel)
+    private Control GetView(DetailViewModelBase viewModel)
     {
         return _viewModelToViewMapper.CreateView(viewModel);
     }

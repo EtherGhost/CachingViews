@@ -5,7 +5,7 @@ using Avalonia.Navigation.ViewModel;
 
 namespace Avalonia.Navigation.Helper;
 
-public class ViewModelToViewMapper : IViewModelToViewMapper
+public sealed class ViewModelToViewMapper : IViewModelToViewMapper
 {
     private readonly Dictionary<Type, Func<DetailViewModelBase, Control>> _viewModelToViewMap = 
         new Dictionary<Type, Func<DetailViewModelBase, Control>>();
@@ -26,7 +26,6 @@ public class ViewModelToViewMapper : IViewModelToViewMapper
             return factory(viewModel);
         }
 
-        return new TextBlock { Text = "Not Found" };
+        return null;
     }
-
 }
