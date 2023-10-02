@@ -32,7 +32,7 @@ public sealed class ViewLocator : IDataTemplate
     {
         if (data is DetailViewModelBase viewModel)
         {
-            var viewType = GetViewType(viewModel.GetType());
+            var view = GetViewType(viewModel);
             var viewModelName = viewModel.GetType().Name;
             var id = viewModel.Id;
 
@@ -44,9 +44,8 @@ public sealed class ViewLocator : IDataTemplate
                 return cacheEntry.View;
             }
 
-            if (viewType != null)
+            if (view is not TextBlock)
             {
-                var view = CreateInstance(viewModel);
                 var newCacheEntry = new ViewCacheEntry(view, viewModelName, id);
                 _viewCache.Add(newCacheEntry);
                 return view;
@@ -58,9 +57,9 @@ public sealed class ViewLocator : IDataTemplate
     
     public bool SupportsRecycling => false;
 
-    private Type GetViewType(Type viewModelType)
+    private Control GetViewType(DetailViewModelBase viewModel)
     {
-        return _viewModelToViewMapper.GetViewType(viewModelType);
+        return _viewModelToViewMapper.CreateView(viewModel);
     }
 
     private void AfterDetailClosed(AfterDetailClosedEventArgs args)
@@ -68,19 +67,5 @@ public sealed class ViewLocator : IDataTemplate
         var cacheEntry = _viewCache.FirstOrDefault(entry =>
             entry.ViewModelName == args.ViewModelName && entry.Id == args.Id);
         _viewCache.Remove(cacheEntry);
-    }
-    
-    private static Control CreateInstance(DetailViewModelBase viewModel)
-    {
-        if (viewModel is ProjectDetailViewModel)
-        {
-            return new ProjectDetailView();
-        }
-        if (viewModel is SystemDetailViewModel)
-        {
-            return new SystemDetailView();
-        }
-        
-        return new TextBlock { Text = "Not Found" };
     }
 }

@@ -24,13 +24,18 @@ namespace Avalonia.Navigation.Startup
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
             builder.RegisterType<ViewModelToViewMapper>().As<IViewModelToViewMapper>().SingleInstance();
             builder.RegisterType<MainWindow>().AsSelf().SingleInstance();;
+            RegisterViewModels(builder);
+
+            builder.Populate(_serviceCollection);
+            return builder.Build();
+        }
+
+        private static void RegisterViewModels(ContainerBuilder builder)
+        {            
             builder.RegisterType<MainViewModel>().AsSelf();
             builder.RegisterType<NavigationViewModel>().As<INavigationViewModel>();
             builder.RegisterType<ProjectDetailViewModel>().Keyed<IDetailViewModel>(nameof(ProjectDetailViewModel));
             builder.RegisterType<SystemDetailViewModel>().Keyed<IDetailViewModel>(nameof(SystemDetailViewModel));
-
-            builder.Populate(_serviceCollection);
-            return builder.Build();
         }
     }
 }

@@ -28,8 +28,8 @@ namespace Avalonia.Navigation
             var eventAggregator = Container.Resolve<IEventAggregator>();
             var viewModelToViewMapper = Container.Resolve<IViewModelToViewMapper>();
             
-            viewModelToViewMapper.MapViewModelToView(typeof(ProjectDetailViewModel), typeof(ProjectDetailView));
-            viewModelToViewMapper.MapViewModelToView(typeof(SystemDetailViewModel), typeof(SystemDetailView));
+            viewModelToViewMapper.MapViewModelToView<ProjectDetailViewModel, ProjectDetailView>(vm => new ProjectDetailView());
+            viewModelToViewMapper.MapViewModelToView<SystemDetailViewModel, SystemDetailView>(vm => new SystemDetailView());
             
             var locator = new ViewLocator(eventAggregator, viewModelToViewMapper);
             DataTemplates.Add(locator);

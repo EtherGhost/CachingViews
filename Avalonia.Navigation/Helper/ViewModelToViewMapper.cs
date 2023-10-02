@@ -1,23 +1,32 @@
 using System;
 using System.Collections.Generic;
+using Avalonia.Controls;
+using Avalonia.Navigation.ViewModel;
 
 namespace Avalonia.Navigation.Helper;
 
 public class ViewModelToViewMapper : IViewModelToViewMapper
 {
-    private readonly Dictionary<Type, Type> _viewModelToViewMap = new Dictionary<Type, Type>();
+    private readonly Dictionary<Type, Func<DetailViewModelBase, Control>> _viewModelToViewMap = 
+        new Dictionary<Type, Func<DetailViewModelBase, Control>>();
 
-    public void MapViewModelToView(Type viewModelType, Type viewType)
+    public void MapViewModelToView<TViewModel, TView>(Func<TViewModel, TView> factory) 
+        where TViewModel : DetailViewModelBase
+        where TView : Control
     {
-        _viewModelToViewMap[viewModelType] = viewType;
+        _viewModelToViewMap[typeof(TViewModel)] = vm => factory((TViewModel)vm);
     }
 
-    public Type GetViewType(Type viewModelType)
+    public Control CreateView<TViewModel>(TViewModel viewModel) where TViewModel : DetailViewModelBase
     {
-        if (_viewModelToViewMap.TryGetValue(viewModelType, out Type viewType))
+        var viewModelType = viewModel.GetType();
+
+        if (_viewModelToViewMap.TryGetValue(viewModelType, out var factory))
         {
-            return viewType;
+            return factory(viewModel);
         }
-        return null;
+
+        return new TextBlock { Text = "Not Found" };
     }
+
 }
