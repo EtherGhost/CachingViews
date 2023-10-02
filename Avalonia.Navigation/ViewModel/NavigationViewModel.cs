@@ -28,33 +28,33 @@ namespace Avalonia.Navigation.ViewModel
             
             Projects.Add(
                 new NavigationItemViewModel(
-                    0, "Project 1",
+                    0, "Project 0",
                     nameof(ProjectDetailViewModel),
                     _eventAggregator));
             Projects.Add(
                 new NavigationItemViewModel(
-                    1, "Project 2",
+                    1, "Project 1",
                     nameof(ProjectDetailViewModel),
                     _eventAggregator));
             Projects.Add(
                 new NavigationItemViewModel(
-                    2, "Project 3",
+                    2, "Project 2",
                     nameof(ProjectDetailViewModel),
                     _eventAggregator));
             
             Systems.Add(
                 new NavigationItemViewModel(
-                    0, "System 1",
+                    0, "System 0",
                     nameof(SystemDetailViewModel),
                     _eventAggregator));
             Systems.Add(
                 new NavigationItemViewModel(
-                    1, "System 2",
+                    1, "System 1",
                     nameof(SystemDetailViewModel),
                     _eventAggregator));
             Systems.Add(
                 new NavigationItemViewModel(
-                    2, "System 3",
+                    2, "System 2",
                     nameof(SystemDetailViewModel), 
                     _eventAggregator));
         }

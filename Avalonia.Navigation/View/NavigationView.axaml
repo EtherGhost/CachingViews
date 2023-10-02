@@ -20,16 +20,21 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                          VerticalScrollBarVisibility="Auto" 
+                          Width="150">
                 <ItemsControl Margin="10"
                               ItemTemplate="{StaticResource NaviItemTemplate}"
-                              ItemsSource="{Binding Projects}" />
+                              ItemsSource="{CompiledBinding Projects}" />
             </ScrollViewer>
 
-            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" 
+                          HorizontalScrollBarVisibility="Auto" 
+                          VerticalScrollBarVisibility="Auto" 
+                          Width="150">
                 <ItemsControl Margin="10"
                               ItemTemplate="{StaticResource NaviItemTemplate}"
-                              ItemsSource="{Binding Systems}" />
+                              ItemsSource="{CompiledBinding Systems}" />
             </ScrollViewer>
     </Grid>
 </UserControl>

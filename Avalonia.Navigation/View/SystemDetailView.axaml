@@ -8,6 +8,13 @@
              x:DataType="viewModel:SystemDetailViewModel">
     
     <StackPanel>
-        <TextBlock Text="{CompiledBinding Title}" />
+        
+        <TextBox
+            Margin="10"
+            Text="{CompiledBinding System.Id}" />
+        <TextBox
+            Margin="10"
+            Text="{CompiledBinding System.Name}" />
+
     </StackPanel>
 </UserControl>

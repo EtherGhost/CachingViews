@@ -16,21 +16,19 @@ namespace Avalonia.Navigation.ViewModel
     {
         private IDetailViewModel _selectedDetailViewModel;
         private readonly IIndex<string, IDetailViewModel> _detailViewModelCreator;
-        private readonly IEventAggregator _eventAggregator;
 
         public MainViewModel(INavigationViewModel navigationViewModel,
             IIndex<string, IDetailViewModel> detailViewModelCreator,
             IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
             _detailViewModelCreator = detailViewModelCreator;
 
             DetailViewModels = new ObservableCollection<IDetailViewModel>();
 
-            _eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
-            _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
-            _eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
-            _eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
+            eventAggregator.GetEvent<AfterDetailSavedEvent>().Subscribe(AfterDetailSaved);
+            eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailView);
+            eventAggregator.GetEvent<AfterDetailDeletedEvent>().Subscribe(AfterDetailDeleted);
+            eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
 
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
             OpenDetailViewCommand = new DelegateCommand<object>(OnOpenDetailViewExecute);
@@ -148,8 +146,9 @@ namespace Avalonia.Navigation.ViewModel
             //OpenDetailView(args).SafeFireAndForget(OnException);
         }
 
-        private async Task OpenDetailView(OpenDetailViewEventArgs args)
+        private Task OpenDetailView(OpenDetailViewEventArgs args)
         {
+            return Task.CompletedTask;
             /*var detailViewModel = DetailViewModels
                 .SingleOrDefault(vm => vm.Id == args.Id
                                        && vm.GetType().Name == args.ViewModelName);

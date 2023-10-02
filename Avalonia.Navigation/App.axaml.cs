@@ -1,7 +1,6 @@
 using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Navigation.Event;
 using Avalonia.Navigation.Helper;
 using Avalonia.Navigation.Startup;
 using Avalonia.Navigation.View;

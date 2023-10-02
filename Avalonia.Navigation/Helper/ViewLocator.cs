@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Navigation.Event;
@@ -13,17 +12,15 @@ namespace Avalonia.Navigation.Helper;
 
 public sealed class ViewLocator : IDataTemplate
 {
-    private readonly IEventAggregator _eventAggregator;
     private readonly List<ViewCacheEntry> _viewCache = new List<ViewCacheEntry>();
     private readonly IViewModelToViewMapper _viewModelToViewMapper;
 
     public ViewLocator(IEventAggregator eventAggregator, 
         IViewModelToViewMapper viewModelToViewMapper)
     {
-        _eventAggregator = eventAggregator;
         _viewModelToViewMapper = viewModelToViewMapper;
         
-        _eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
+        eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(AfterDetailClosed);
     }
 
     public bool Match(object? data)
@@ -49,8 +46,7 @@ public sealed class ViewLocator : IDataTemplate
 
             if (viewType != null)
             {
-                var view = (Control)Activator.CreateInstance(viewType);
-
+                var view = CreateInstance(viewModel);
                 var newCacheEntry = new ViewCacheEntry(view, viewModelName, id);
                 _viewCache.Add(newCacheEntry);
                 return view;
@@ -72,5 +68,19 @@ public sealed class ViewLocator : IDataTemplate
         var cacheEntry = _viewCache.FirstOrDefault(entry =>
             entry.ViewModelName == args.ViewModelName && entry.Id == args.Id);
         _viewCache.Remove(cacheEntry);
+    }
+    
+    private static Control CreateInstance(DetailViewModelBase viewModel)
+    {
+        if (viewModel is ProjectDetailViewModel)
+        {
+            return new ProjectDetailView();
+        }
+        if (viewModel is SystemDetailViewModel)
+        {
+            return new SystemDetailView();
+        }
+        
+        return new TextBlock { Text = "Not Found" };
     }
 }

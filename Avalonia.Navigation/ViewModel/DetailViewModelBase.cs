@@ -157,7 +157,7 @@ namespace Avalonia.Navigation.ViewModel
 
         private static void OnException(Exception ex)
         {
-            // Do something clever with that exception
+            // Do something clever with the exception
             throw ex;
         }
     }
